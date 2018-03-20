@@ -13,8 +13,10 @@ verifier:
   name: inspec
 
 platforms:
-  - name: ubuntu-16.04
   - name: centos-7
+    driver:
+      network:
+        - ['forwarded_port', {guest: 9292, host: 9292, id: 'geminabox', auto_correct: true}]
 
 suites:
   - name: default

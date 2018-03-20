@@ -1,0 +1,18 @@
+require "rubygems"
+require "geminabox"
+
+Geminabox.data = "/var/geminabox-data"
+Geminabox.rubygems_proxy = true
+
+Geminabox.http_adapter.http_client = HTTPClient.new(ENV['http_proxy']).tap do |http_client|
+  http_client.transparent_gzip_decompression = true
+  http_client.keep_alive_timeout = 32 # sec
+  http_client.ssl_config.verify_mode = OpenSSL::SSL::VERIFY_NONE
+  http_client.send_timeout = 0
+  http_client.receive_timeout = 0
+end
+
+use Rack::Session::Pool, expire_after: 1000 # sec
+use Rack::Protection
+
+run Geminabox::Server
